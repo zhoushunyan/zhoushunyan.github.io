@@ -5,13 +5,16 @@
   
 
   
-  <title>Hexo</title>
+  <title>PCA | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. 协方差Co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PCA">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;01&#x2F;PCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95&#x2F;index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. 协方差Co">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-12-01T05:41:25.222Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -59,154 +62,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-KPCA线性降维算法 " class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/" class="article-date">
-  <time datetime="2019-12-01T05:41:39.418Z" itemprop="datePublished">2019-12-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/">KPCA</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="特征抽取"><a href="#特征抽取" class="headerlink" title="特征抽取"></a>特征抽取</h2><p>可以将原始数据集变换到一个维度更低的新的特征子空间，在尽可能多地保持相关信息的情况下，对数据进行压缩</p>
-<p>##线性可分 VS 非线性可分</p>
-<p><img src="https://github.com/rasbt/python-machine-learning-book/raw/master/code/ch05/images/05_11.png" alt="fsaf"></p>
-<p>可以通过kPCA将非线性数据映射到高维空间，在高维空间下使用标准PCA将其映射到另一个低维空间</p>
-<p><img src="https://github.com/KARL13YAN/my-blogs/raw/master/pythonML/kPCA.png" alt=""></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>定义非线性映射函数，该函数可以对原始特征进行非线性组合，以将原始的d维数据集映射到更高维的k维特征空间。</p>
-<p>##使用Python实现kPCA<br>    from scipy.spatial.distance import pdist, squareform<br>    from scipy import exp<br>    from numpy.linalg import eigh<br>    import numpy as np</p>
-<pre><code>def rbf_kernel_pca(X, gamma, n_components):
-    &quot;&quot;&quot;
-    RBF kernel PCA implementation.
-
-    Parameters
-    ------------
-    X: {NumPy ndarray}, shape = [n_samples, n_features]
-
-    gamma: float
-      Tuning parameter of the RBF kernel
-
-    n_components: int
-      Number of principal components to return
-
-    Returns
-    ------------
-     X_pc: {NumPy ndarray}, shape = [n_samples, k_features]
-       Projected dataset   
-
-    &quot;&quot;&quot;
-    # Calculate pairwise squared Euclidean distances
-    # in the MxN dimensional dataset.
-    sq_dists = pdist(X, &apos;sqeuclidean&apos;)
-
-    # Convert pairwise distances into a square matrix.
-    mat_sq_dists = squareform(sq_dists)
-
-    # Compute the symmetric kernel matrix.
-    K = exp(-gamma * mat_sq_dists)
-
-    # Center the kernel matrix.
-    N = K.shape[0]
-    one_n = np.ones((N, N)) / N
-    K = K - one_n.dot(K) - K.dot(one_n) + one_n.dot(K).dot(one_n)
-
-    # Obtaining eigenpairs from the centered kernel matrix
-    # numpy.linalg.eigh returns them in sorted order
-    eigvals, eigvecs = eigh(K)
-
-    # Collect the top k eigenvectors (projected samples)
-    X_pc = np.column_stack((eigvecs[:, -i]
-                            for i in range(1, n_components + 1)))
-
-    return X_pc</code></pre><p>##创建如下数据<br>    import matplotlib.pyplot as plt<br>    from sklearn.datasets import make_moons</p>
-<pre><code>X, y = make_moons(n_samples=100, random_state=123)
-
-plt.scatter(X[y == 0, 0], X[y == 0, 1], color=&apos;red&apos;, marker=&apos;^&apos;, alpha=0.5)
-plt.scatter(X[y == 1, 0], X[y == 1, 1], color=&apos;blue&apos;, marker=&apos;o&apos;, alpha=0.5)
-
-plt.tight_layout()
-plt.show()</code></pre><h2 id="使用PCA算法"><a href="#使用PCA算法" class="headerlink" title="使用PCA算法"></a>使用PCA算法</h2><pre><code>from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-
-scikit_pca = PCA(n_components=2)
-X_spca = scikit_pca.fit_transform(X)
-
-fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(7, 3))
-
-ax[0].scatter(X_spca[y == 0, 0], X_spca[y == 0, 1],
-              color=&apos;red&apos;, marker=&apos;^&apos;, alpha=0.5)
-ax[0].scatter(X_spca[y == 1, 0], X_spca[y == 1, 1],
-              color=&apos;blue&apos;, marker=&apos;o&apos;, alpha=0.5)
-
-ax[1].scatter(X_spca[y == 0, 0], np.zeros((50, 1)) + 0.02,
-              color=&apos;red&apos;, marker=&apos;^&apos;, alpha=0.5)
-ax[1].scatter(X_spca[y == 1, 0], np.zeros((50, 1)) - 0.02,
-              color=&apos;blue&apos;, marker=&apos;o&apos;, alpha=0.5)
-
-ax[0].set_xlabel(&apos;PC1&apos;)
-ax[0].set_ylabel(&apos;PC2&apos;)
-ax[1].set_ylim([-1, 1])
-ax[1].set_yticks([])
-ax[1].set_xlabel(&apos;PC1&apos;)
-
-plt.tight_layout()
-# plt.savefig(&apos;./figures/half_moon_2.png&apos;, dpi=300)
-plt.show()</code></pre><h2 id="使用KPCA算法"><a href="#使用KPCA算法" class="headerlink" title="使用KPCA算法"></a>使用KPCA算法</h2><pre><code>from matplotlib.ticker import FormatStrFormatter
-
-X_kpca = rbf_kernel_pca(X, gamma=15, n_components=2)
-
-fig, ax = plt.subplots(nrows=1,ncols=2, figsize=(7,3))
-ax[0].scatter(X_kpca[y==0, 0], X_kpca[y==0, 1], 
-            color=&apos;red&apos;, marker=&apos;^&apos;, alpha=0.5)
-ax[0].scatter(X_kpca[y==1, 0], X_kpca[y==1, 1],
-            color=&apos;blue&apos;, marker=&apos;o&apos;, alpha=0.5)
-
-ax[1].scatter(X_kpca[y==0, 0], np.zeros((50,1))+0.02, 
-            color=&apos;red&apos;, marker=&apos;^&apos;, alpha=0.5)
-ax[1].scatter(X_kpca[y==1, 0], np.zeros((50,1))-0.02,
-            color=&apos;blue&apos;, marker=&apos;o&apos;, alpha=0.5)
-
-ax[0].set_xlabel(&apos;PC1&apos;)
-ax[0].set_ylabel(&apos;PC2&apos;)
-ax[1].set_ylim([-1, 1])
-ax[1].set_yticks([])
-ax[1].set_xlabel(&apos;PC1&apos;)
-ax[0].xaxis.set_major_formatter(FormatStrFormatter(&apos;%0.1f&apos;))
-ax[1].xaxis.set_major_formatter(FormatStrFormatter(&apos;%0.1f&apos;))
-
-plt.tight_layout()
-# plt.savefig(&apos;./figures/half_moon_3.png&apos;, dpi=300)
-plt.show()</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/" data-id="ck3mlq5vl0000i8vj8psw5knp" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-PCA线性降维算法" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-PCA线性降维算法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/12/01/PCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95/" class="article-date">
   <time datetime="2019-12-01T04:51:06.192Z" itemprop="datePublished">2019-12-01</time>
@@ -219,8 +75,8 @@ plt.show()</code></pre>
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/01/PCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95/">PCA</a>
+    <h1 class="article-title" itemprop="name">
+      PCA
     </h1>
   
 
@@ -261,309 +117,28 @@ plt.show()</code></pre>
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-new-Post" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/11/07/new-Post/" class="article-date">
-  <time datetime="2019-11-07T10:58:49.000Z" itemprop="datePublished">2019-11-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+    <a href="/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/07/new-Post/">new Post</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>我要这个天下</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/07/new-Post/" data-id="ck3mlq5w00002i8vjbslf3y9c" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%87%AA%E8%BF%B0/" rel="tag">自述</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-My-Gallery" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/11/07/My-Gallery/" class="article-date">
-  <time datetime="2019-11-07T09:40:36.306Z" itemprop="datePublished">2019-11-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+          KPCA
         
+      </div>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/07/My-Gallery/">My Gallery</a>
-    </h1>
   
+    <a href="/2019/11/07/new-Post/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">new Post</div>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Part-1-Count-Based-Word-Vectors"><a href="#Part-1-Count-Based-Word-Vectors" class="headerlink" title="Part 1: Count-Based Word Vectors"></a>Part 1: Count-Based Word Vectors</h1><p>Most word vector models start from the following idea:</p>
-<p><em>You shall know a word by the company it keeps (<a href="https://en.wikipedia.org/wiki/John_Rupert_Firth" target="_blank" rel="noopener">Firth, J. R. 1957:11</a>)</em></p>
-<p>Many word vector implementations are driven by the idea that similar words, i.e., (near) synonyms, will be used in similar contexts. As a result, similar words will often be spoken or written along with a shared subset of words, i.e., contexts. By examining these contexts, we can try to develop embeddings for our words. With this intuition in mind, many “old school” approaches to constructing word vectors relied on word counts. Here we elaborate upon one of those strategies, <em>co-occurrence matrices</em> (for more information, see <a href="http://web.stanford.edu/class/cs124/lec/vectorsemantics.video.pdf" target="_blank" rel="noopener">here</a> or <a href="https://medium.com/data-science-group-iitr/word-embedding-2d05d270b285" target="_blank" rel="noopener">here</a>).</p>
-<h2 id="Word-Vectors"><a href="#Word-Vectors" class="headerlink" title="Word Vectors"></a>Word Vectors</h2><p>Word Vectors are often used as a fundamental component for downstream NLP tasks, e.g. question answering, text generation, translation, etc., so it is important to build some intuitions as to their strengths and weaknesses. Here, you will explore two types of word vectors: those derived from <em>co-occurrence matrices</em>, and those derived via <em>word2vec</em>. </p>
-<p><strong>Assignment Notes:</strong> Please make sure to save the notebook as you go along. Submission Instructions are located at the bottom of the notebook.</p>
-<p><strong>Note on Terminology:</strong> The terms “word vectors” and “word embeddings” are often used interchangeably. The term “embedding” refers to the fact that we are encoding aspects of a word’s meaning in a lower dimensional space. As <a href="https://en.wikipedia.org/wiki/Word_embedding" target="_blank" rel="noopener">Wikipedia</a> states, “<em>conceptually it involves a mathematical embedding from a space with one dimension per word to a continuous vector space with a much lower dimension</em>“.</p>
-<h1 id="Co-Occurrence"><a href="#Co-Occurrence" class="headerlink" title="Co-Occurrence"></a>Co-Occurrence</h1><p>A co-occurrence matrix counts how often things co-occur in some environment. Given some word $w_i$ occurring in the document, we consider the <em>context window</em> surrounding $w_i$. Supposing our fixed window size is $n$, then this is the $n$ preceding and $n$ subsequent words in that document, i.e. words $w_{i-n} \dots w_{i-1}$ and $w_{i+1} \dots w_{i+n}$. We build a <em>co-occurrence matrix</em> $M$, which is a symmetric word-by-word matrix in which $M_{ij}$ is the number of times $w_j$ appears inside $w_i$’s window.</p>
-<p><strong>Example: Co-Occurrence with Fixed Window of n=1</strong>:</p>
-<p>Document 1: “all that glitters is not gold”</p>
-<p>Document 2: “all is well that ends well”</p>
-<table>
-<thead>
-<tr>
-<th>*</th>
-<th>START</th>
-<th>all</th>
-<th>that</th>
-<th>glitters</th>
-<th>is</th>
-<th>not</th>
-<th>gold</th>
-<th>well</th>
-<th>ends</th>
-<th>END</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>START</td>
-<td>0</td>
-<td>2</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>all</td>
-<td>2</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>that</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>glitters</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>is</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>not</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>gold</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>well</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<td>ends</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>END</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody></table>
-<p><strong>Note:</strong> In NLP, we often add START and END tokens to represent the beginning and end of sentences, paragraphs or documents. In thise case we imagine START and END tokens encapsulating each document, e.g., “START All that glitters is not gold END”, and include these tokens in our co-occurrence counts.</p>
-<p>The rows (or columns) of this matrix provide one type of word vectors (those based on word-word co-occurrence), but the vectors will be large in general (linear in the number of distinct words in a corpus). Thus, our next step is to run <em>dimensionality reduction</em>. In particular, we will run <em>SVD (Singular Value Decomposition)</em>, which is a kind of generalized <em>PCA (Principal Components Analysis)</em> to select the top $k$ principal components. Here’s a visualization of dimensionality reduction with SVD. In this picture our co-occurrence matrix is $A$ with $n$ rows corresponding to $n$ words. We obtain a full matrix decomposition, with the singular values ordered in the diagonal $S$ matrix, and our new, shorter length-$k$ word vectors in $U_k$.</p>
-<p><img src="imgs/svd.png" alt="Picture of an SVD" title="SVD"></p>
-<p>This reduced-dimensionality co-occurrence representation preserves semantic relationships between words, e.g. <em>doctor</em> and <em>hospital</em> will be closer than <em>doctor</em> and <em>dog</em>. </p>
-<p><strong>Notes:</strong> If you can barely remember what an eigenvalue is, here’s <a href="https://davetang.org/file/Singular_Value_Decomposition_Tutorial.pdf" target="_blank" rel="noopener">a slow, friendly introduction to SVD</a>. If you want to learn more thoroughly about PCA or SVD, feel free to check out lectures <a href="https://web.stanford.edu/class/cs168/l/l7.pdf" target="_blank" rel="noopener">7</a>, <a href="http://theory.stanford.edu/~tim/s15/l/l8.pdf" target="_blank" rel="noopener">8</a>, and <a href="https://web.stanford.edu/class/cs168/l/l9.pdf" target="_blank" rel="noopener">9</a> of CS168. These course notes provide a great high-level treatment of these general purpose algorithms. Though, for the purpose of this class, you only need to know how to extract the k-dimensional embeddings by utilizing pre-programmed implementations of these algorithms from the numpy, scipy, or sklearn python packages. In practice, it is challenging to apply full SVD to large corpora because of the memory needed to perform PCA or SVD. However, if you only want the top $k$ vector components for relatively small $k$ — known as <em><a href="https://en.wikipedia.org/wiki/Singular_value_decomposition#Truncated_SVD" target="_blank" rel="noopener">Truncated SVD</a></em> — then there are reasonably scalable techniques to compute those iteratively.</p>
-<h3 id="Plotting-Co-Occurrence-Word-Embeddings"><a href="#Plotting-Co-Occurrence-Word-Embeddings" class="headerlink" title="Plotting Co-Occurrence Word Embeddings"></a>Plotting Co-Occurrence Word Embeddings</h3><p>Here, we will be using the Reuters (business and financial news) corpus. If you haven’t run the import cell at the top of this page, please run it now (click it and press SHIFT-RETURN). The corpus consists of 10,788 news documents totaling 1.3 million words. These documents span 90 categories and are split into train and test. For more details, please see <a href="https://www.nltk.org/book/ch02.html" target="_blank" rel="noopener">https://www.nltk.org/book/ch02.html</a>. We provide a <code>read_corpus</code> function below that pulls out only articles from the “crude” (i.e. news articles about oil, gas, etc.) category. The function also adds START and END tokens to each of the documents, and lowercases words. You do <strong>not</strong> have perform any other kind of pre-processing.</p>
-<h3 id="Question-1-1-Implement-distinct-words-code-2-points"><a href="#Question-1-1-Implement-distinct-words-code-2-points" class="headerlink" title="Question 1.1: Implement distinct_words [code] (2 points)"></a>Question 1.1: Implement <code>distinct_words</code> [code] (2 points)</h3><p>Write a method to work out the distinct words (word types) that occur in the corpus. You can do this with <code>for</code> loops, but it’s more efficient to do it with Python list comprehensions. In particular, <a href="https://coderwall.com/p/rcmaea/flatten-a-list-of-lists-in-one-line-in-python" target="_blank" rel="noopener">this</a> may be useful to flatten a list of lists. If you’re not familiar with Python list comprehensions in general, here’s <a href="https://python-3-patterns-idioms-test.readthedocs.io/en/latest/Comprehensions.html" target="_blank" rel="noopener">more information</a>.</p>
-<p>You may find it useful to use <a href="https://www.w3schools.com/python/python_sets.asp" target="_blank" rel="noopener">Python sets</a> to remove duplicate words.</p>
-<h3 id="Question-1-2-Implement-compute-co-occurrence-matrix-code-3-points"><a href="#Question-1-2-Implement-compute-co-occurrence-matrix-code-3-points" class="headerlink" title="Question 1.2: Implement compute_co_occurrence_matrix [code] (3 points)"></a>Question 1.2: Implement <code>compute_co_occurrence_matrix</code> [code] (3 points)</h3><p>Write a method that constructs a co-occurrence matrix for a certain window-size $n$ (with a default of 4), considering words $n$ before and $n$ after the word in the center of the window. Here, we start to use <code>numpy (np)</code> to represent vectors, matrices, and tensors. If you’re not familiar with NumPy, there’s a NumPy tutorial in the second half of this cs231n <a href="http://cs231n.github.io/python-numpy-tutorial/" target="_blank" rel="noopener">Python NumPy tutorial</a>.</p>
-<h3 id="Question-1-3-Implement-reduce-to-k-dim-code-1-point"><a href="#Question-1-3-Implement-reduce-to-k-dim-code-1-point" class="headerlink" title="Question 1.3: Implement reduce_to_k_dim [code] (1 point)"></a>Question 1.3: Implement <code>reduce_to_k_dim</code> [code] (1 point)</h3><p>Construct a method that performs dimensionality reduction on the matrix to produce k-dimensional embeddings. Use SVD to take the top k components and produce a new matrix of k-dimensional embeddings. </p>
-<p><strong>Note:</strong> All of numpy, scipy, and scikit-learn (<code>sklearn</code>) provide <em>some</em> implementation of SVD, but only scipy and sklearn provide an implementation of Truncated SVD, and only sklearn provides an efficient randomized algorithm for calculating large-scale Truncated SVD. So please use <a href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html" target="_blank" rel="noopener">sklearn.decomposition.TruncatedSVD</a>.</p>
-<h3 id="Question-1-4-Implement-plot-embeddings-code-1-point"><a href="#Question-1-4-Implement-plot-embeddings-code-1-point" class="headerlink" title="Question 1.4: Implement plot_embeddings [code] (1 point)"></a>Question 1.4: Implement <code>plot_embeddings</code> [code] (1 point)</h3><p>Here you will write a function to plot a set of 2D vectors in 2D space. For graphs, we will use Matplotlib (<code>plt</code>).</p>
-<p>For this example, you may find it useful to adapt <a href="https://www.pythonmembers.club/2018/05/08/matplotlib-scatter-plot-annotate-set-text-at-label-each-point/" target="_blank" rel="noopener">this code</a>. In the future, a good way to make a plot is to look at <a href="https://matplotlib.org/gallery/index.html" target="_blank" rel="noopener">the Matplotlib gallery</a>, find a plot that looks somewhat like what you want, and adapt the code they give.</p>
-<h3 id="Question-1-5-Co-Occurrence-Plot-Analysis-written-3-points"><a href="#Question-1-5-Co-Occurrence-Plot-Analysis-written-3-points" class="headerlink" title="Question 1.5: Co-Occurrence Plot Analysis [written] (3 points)"></a>Question 1.5: Co-Occurrence Plot Analysis [written] (3 points)</h3><p>Now we will put together all the parts you have written! We will compute the co-occurrence matrix with fixed window of 4, over the Reuters “crude” corpus. Then we will use TruncatedSVD to compute 2-dimensional embeddings of each word. TruncatedSVD returns U*S, so we normalize the returned vectors, so that all the vectors will appear around the unit circle (therefore closeness is directional closeness). <strong>Note</strong>: The line of code below that does the normalizing uses the NumPy concept of <em>broadcasting</em>. If you don’t know about broadcasting, check out<br><a href="https://jakevdp.github.io/PythonDataScienceHandbook/02.05-computation-on-arrays-broadcasting.html" target="_blank" rel="noopener">Computation on Arrays: Broadcasting by Jake VanderPlas</a>.</p>
-<p>Run the below cell to produce the plot. It’ll probably take a few seconds to run. What clusters together in 2-dimensional embedding space? What doesn’t cluster together that you might think should have?  <strong>Note:</strong> “bpd” stands for “barrels per day” and is a commonly used abbreviation in crude oil topic articles.</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/07/My-Gallery/" data-id="ck3mlq5wn0006i8vjfn5gfivq" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/11/04/hello-world/" class="article-date">
-  <time datetime="2019-11-04T13:04:40.999Z" itemprop="datePublished">2019-11-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/04/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/04/hello-world/" data-id="ck3mlq5vx0001i8vj1kqi1ei9" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         

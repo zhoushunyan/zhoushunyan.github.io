@@ -61,6 +61,94 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-关键词提取算法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/01/%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95/" class="article-date">
+  <time datetime="2019-12-01T07:20:34.587Z" itemprop="datePublished">2019-12-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/01/%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95/">关键词提取</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="技术概要"><a href="#技术概要" class="headerlink" title="技术概要"></a>技术概要</h2><p>描述：如果我们可以准确地将所有的文档都用几个简单的关键词描述出来，我们单单看这几个关键词就可以判断这篇文章是不是我们所需要的。这样就可以提高我们信息获取的效率。</p>
+<p>###有监督和无监督<br><strong>有监督</strong>：通过分类的方式进行的，首先，通过构建一个较为丰富和完善的词表，然后通过判断每个文档与词表中的每个词的匹配程度，以这种类似打标签的方法，达到关键词提取的效果。</p>
+<p>优点：有较高的精度<br>缺点：需要大批量的标注的数据，人工成不过高。</p>
+<p><strong>无监督</strong>：TF-IDF,TextRank算法，主题模型算法（LSA, LSI,LDA)</p>
+<h2 id="TF-IDF算法"><a href="#TF-IDF算法" class="headerlink" title="TF/IDF算法"></a>TF/IDF算法</h2><p><strong>TF/IDF算法</strong>（Term Frequency-Inverse Document Frequency),词频-逆文档频次算法。）是一种基于统计的及算法方法。用于评估在一个文档中一个词对某个文档的重要程度。</p>
+<p><strong>TF算法：</strong></p>
+<p>TF算法是统计一个词在一篇文档中出现的频次，其思想可以这样描述：一个词在文档中出现的次数越多，则对文档的表达能力就越强。<br><img src="https://cdn.mathpix.com/snip/images/eCvWPEPHVDuGuoly8pfa5UysNHY1NvjKl7eDw4gTJgI.original.fullsize.png" alt=""></p>
+<p>tf（word）=（word在文档中出现的次数）/（文档总词数）</p>
+<p><strong>例子：</strong></p>
+<blockquote>
+<pre><code>世界献血日，学校团体、献血服务自愿者等可到血液中心参观检验加工过程，我们会对检验结果进行公示，同时血液的价格也会进行公示。</code></pre><p>上文中“献血”，“血液”，“进行”，“公示”等词出现的频次均为2.</p>
+</blockquote>
+<p><strong>IDF</strong>：<br>统计一个词在文档集中的多少个文档中出现，描述：如果一个词在越少的文档中出现，则其对文档的区分能力就越强<br><img src="https://cdn.mathpix.com/snip/images/xVxByO7dPrxtjRa0HDgYjjUY6g5pcmXsh00JnNvIQLM.original.fullsize.png" alt=""></p>
+<p>|D|是文档集中的总文档数 ，|Di|是文档集中出现词i的文档数量。分母加一是采用拉普拉斯平滑，避免有部分新的词没有在语料库中出现过而导致分母为零，增强算法的健壮性。</p>
+<p><strong>tfxIdf(i,j)</strong></p>
+<p><img src="https://cdn.mathpix.com/snip/images/tyaMpPhnWCSpNJegpmGpjHbsA5-PrNrrKOMtPKAwFEg.original.fullsize.png" alt=""></p>
+<p>如上述文档中tf=2/30=0.067。我们假设文档集有1000.其中出现“血液”，“献血”，为15，10.</p>
+<p>所以idf（献血）=10  idf（血液）=4.2</p>
+<p>##TextRank算法</p>
+<p><strong>描述：</strong>TextRank算法则是可以脱离语料库的背景，仅对单个文档进行分析来提取关键词。基于句子的维度分析，给每个句子进行打分，挑出分数最高的n个句子作为文档的关键句。</p>
+<p>###PageRank</p>
+<p>PageRank算法是Google创始人拉里.佩奇和谢尔盖.布林于1997年构建早期的搜索系统原型是提出的链接分析算法，该算法是他们用来评价搜索系统网页重要性的一种算法。</p>
+<p>基本思想：</p>
+<p>1）链接数量。一个网页被越多的其他网页链接，说明这个网页越重要。</p>
+<p>2）链接质量。一个网页被一个越高权值的网页链接，也能表明这个网页越重要。</p>
+<p><img src="https://cdn.mathpix.com/snip/images/TOdNlF5s-sh_JGMr3sTRwPNDp91eu7O4GfJQbdBIlD4.original.fullsize.png" alt=""></p>
+<p>算法开始时会将所有网页的得分初始化为1，来对每个网页的分数进行收敛。</p>
+<p>上式中，会导致一些孤立网页（也就是没有出入链的网页）可能得分为零。因此加入一个阻尼系数d。</p>
+<p><img src="https://cdn.mathpix.com/snip/images/6XV1HV1WBn7X_oBlvwKGzFn_HzHhE4HX_Pt8Z4mwUBU.original.fullsize.png" alt=""></p>
+<p>###TextRank<br>TextRank 是在PageRank的基础上修改的。</p>
+<p>TextRank进行自动摘要是有权图。因为在计分时除了考虑链接句的重要性外，还要考虑两个句子间的相似性。<br>计算每个句子给它链接句的贡献时，不是通过平均分配的方式，而是通过计算权重占总权重的比例分配的。在这里权重就是两个句子的相似度。</p>
+<p>相似度计算可以采用编辑距离，余弦相似度等。</p>
+<p><img src="https://cdn.mathpix.com/snip/images/GAbrYgPP7ctBZhLxEkHfzgDsfuiBNGIsgxSgKUCRJdo.original.fullsize.png" alt=""></p>
+<p>##主题模型算法</p>
+<p>若有一篇文章中介绍了狮子，老虎，狗，猫等动物，但是文章中没有动物两个字，so，前面两种算法就不能提取出动物这个隐含的主题信息。</p>
+<p>###LSA（LSI）<br>LSA(Latent Semantic Analysis,潜在语义分析）LSI（Latent Semantic index,潜在语义索引）</p>
+<p>LSA算法步骤：</p>
+<p>1）使用BOW模型将每个文档表示为向量</p>
+<p>2）将文档词向量拼接起来构成词-文档矩阵（mxn）；</p>
+<p>3） 使用奇异值分解（SVD） 操作（[mxr].[rxr].[r*n])</p>
+<p>4) 将文档映射到更低维度k（[mxk].[kxk] .[k*n])</p>
+<p>每个词和文档都可以表示为k个主题构成的空间中的一个点，通过计算每个词和文档的相似度（余弦相似度orKl相似度），得到每个文档中的每个词的相似度结果。取相似度最高的词即为关键词。</p>
+<p>SVD的计算复杂度非常高，特征空间维度较大，计算效率十分低。</p>
+<p>###LDA算法</p>
+<p>1 对d维数据进行标准化处理（d为特征数量）</p>
+<p>2 对于每一类别，计算d维的均值向量</p>
+<p>3 构造类间的散布矩阵 SBSB 以及 类内散布矩阵 SWSW</p>
+<p>4 计算矩阵 S−1WSBSW−1SB 的特征值以及对应的特征向量</p>
+<p>5 选取前k个特征值所对应的特征向量，构造一个 d∗kd∗k 维的转换矩阵 WW,其中特征向量以列的形式排列</p>
+<p>6 使用转换矩阵 WW 将样本映射到新的特征子空间上</p>
+<p><strong>代码：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.discriminant_analysis <span class="keyword">import</span> LinearDiscriminantAnalysis</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">author: heucoder</span></span><br><span class="line"><span class="string">email: 812860165@qq.com</span></span><br><span class="line"><span class="string">date: 2019.6.13</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lda</span><span class="params">(data, target, n_dim)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    :param data: (n_samples, n_features)</span></span><br><span class="line"><span class="string">    :param target: data class</span></span><br><span class="line"><span class="string">    :param n_dim: target dimension</span></span><br><span class="line"><span class="string">    :return: (n_samples, n_dims)</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    clusters = np.unique(target)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> n_dim &gt; len(clusters) - <span class="number">1</span>:</span><br><span class="line">        print(<span class="string">"K is too much"</span>)</span><br><span class="line">        print(<span class="string">"please input again"</span>)</span><br><span class="line">        exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># within_class scatter matrix</span></span><br><span class="line">    Sw = np.zeros((data.shape[<span class="number">1</span>], data.shape[<span class="number">1</span>]))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> clusters:</span><br><span class="line">        datai = data[target == i]</span><br><span class="line">        datai = datai - datai.mean(<span class="number">0</span>)</span><br><span class="line">        Swi = np.mat(datai).T * np.mat(datai)</span><br><span class="line">        Sw += Swi</span><br><span class="line"></span><br><span class="line">    <span class="comment"># between_class scatter matrix</span></span><br><span class="line">    SB = np.zeros((data.shape[<span class="number">1</span>], data.shape[<span class="number">1</span>]))</span><br><span class="line">    u = data.mean(<span class="number">0</span>)  <span class="comment"># 所有样本的平均值</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> clusters:</span><br><span class="line">        Ni = data[target == i].shape[<span class="number">0</span>]</span><br><span class="line">        ui = data[target == i].mean(<span class="number">0</span>)  <span class="comment"># 某个类别的平均值</span></span><br><span class="line">        SBi = Ni * np.mat(ui - u).T * np.mat(ui - u)</span><br><span class="line">        SB += SBi</span><br><span class="line">    S = np.linalg.inv(Sw) * SB</span><br><span class="line">    eigVals, eigVects = np.linalg.eig(S)  <span class="comment"># 求特征值，特征向量</span></span><br><span class="line">    eigValInd = np.argsort(eigVals)</span><br><span class="line">    eigValInd = eigValInd[:(-n_dim - <span class="number">1</span>):<span class="number">-1</span>]</span><br><span class="line">    w = eigVects[:, eigValInd]</span><br><span class="line">    data_ndim = np.dot(data, w)</span><br><span class="line">    print(data_ndim)</span><br><span class="line">    <span class="keyword">return</span> data_ndim</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    iris = load_iris()</span><br><span class="line">    X = iris.data</span><br><span class="line">    Y = iris.target</span><br><span class="line">    data_1 = lda(X, Y, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    data_2 = LinearDiscriminantAnalysis(n_components=<span class="number">2</span>).fit_transform(X, Y)</span><br><span class="line"></span><br><span class="line">    plt.figure(figsize=(<span class="number">8</span>, <span class="number">4</span>))</span><br><span class="line">    plt.subplot(<span class="number">121</span>)</span><br><span class="line">    plt.title(<span class="string">"my_LDA"</span>)</span><br><span class="line">    plt.scatter(data_1[:, <span class="number">0</span>], data_1[:, <span class="number">1</span>], c=Y)</span><br><span class="line"></span><br><span class="line">    plt.subplot(<span class="number">122</span>)</span><br><span class="line">    plt.title(<span class="string">"sklearn_LDA"</span>)</span><br><span class="line">    plt.scatter(data_2[:, <span class="number">0</span>], data_2[:, <span class="number">1</span>], c=Y)</span><br><span class="line">    plt.savefig(<span class="string">"LDA.png"</span>)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/12/01/%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95/" data-id="ck3o9akr10004ucvjamj79jru" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-KPCA线性降维算法 " class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/" class="article-date">
@@ -134,9 +222,9 @@
     X_pc = np.column_stack((eigvecs[:, -i]
                             for i in range(1, n_components + 1)))
 
-    return X_pc</code></pre><p>##创建如下数据<br>    import matplotlib.pyplot as plt<br>    from sklearn.datasets import make_moons</p>
-<pre><code>X, y = make_moons(n_samples=100, random_state=123)
-
+    return X_pc</code></pre><h2 id="创建如下数据"><a href="#创建如下数据" class="headerlink" title="创建如下数据"></a>创建如下数据</h2><pre><code>import matplotlib.pyplot as plt
+from sklearn.datasets import make_moons
+X, y = make_moons(n_samples=100, random_state=123)
 plt.scatter(X[y == 0, 0], X[y == 0, 1], color=&apos;red&apos;, marker=&apos;^&apos;, alpha=0.5)
 plt.scatter(X[y == 1, 0], X[y == 1, 1], color=&apos;blue&apos;, marker=&apos;o&apos;, alpha=0.5)
 
@@ -196,7 +284,7 @@ plt.show()</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/" data-id="ck3mlq5vl0000i8vj8psw5knp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/" data-id="ck3o9akqu0001ucvjg8562yag" class="article-share-link">Share</a>
       
       
     </footer>
@@ -255,7 +343,7 @@ plt.show()</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/01/PCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95/" data-id="ck3mlq5w30003i8vj51ife9hw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/01/PCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95/" data-id="ck3o9akqy0002ucvj1joa7xzq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -292,7 +380,7 @@ plt.show()</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/07/new-Post/" data-id="ck3mlq5w00002i8vjbslf3y9c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/11/07/new-Post/" data-id="ck3o9akqz0003ucvj1jn247fl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%87%AA%E8%BF%B0/" rel="tag">自述</a></li></ul>
@@ -502,7 +590,7 @@ plt.show()</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/07/My-Gallery/" data-id="ck3mlq5wn0006i8vjfn5gfivq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/11/07/My-Gallery/" data-id="ck3o9akrn0007ucvja97sgmkh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li></ul>
@@ -553,7 +641,7 @@ plt.show()</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/04/hello-world/" data-id="ck3mlq5vx0001i8vj1kqi1ei9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/11/04/hello-world/" data-id="ck3o9akqk0000ucvj4dylhdug" class="article-share-link">Share</a>
       
       
     </footer>
@@ -608,6 +696,10 @@ plt.show()</code></pre>
       <ul>
         
           <li>
+            <a href="/2019/12/01/%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95/">关键词提取</a>
+          </li>
+        
+          <li>
             <a href="/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/">KPCA</a>
           </li>
         
@@ -621,10 +713,6 @@ plt.show()</code></pre>
         
           <li>
             <a href="/2019/11/07/My-Gallery/">My Gallery</a>
-          </li>
-        
-          <li>
-            <a href="/2019/11/04/hello-world/">Hello World</a>
           </li>
         
       </ul>

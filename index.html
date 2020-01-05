@@ -61,6 +61,412 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-python学习/高级特性" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/05/python%E5%AD%A6%E4%B9%A0/%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" class="article-date">
+  <time datetime="2020-01-05T05:17:01.586Z" itemprop="datePublished">2020-01-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/05/python%E5%AD%A6%E4%B9%A0/%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/">高级特性</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><h3 id="begin"><a href="#begin" class="headerlink" title="begin"></a>begin</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L = [&apos;Michael&apos;, &apos;Sarah&apos;, &apos;Tracy&apos;, &apos;Bob&apos;, &apos;Jack&apos;]</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017269965565856" target="_blank" rel="noopener">原文</a></p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[L[0], L[1], L[2]]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&apos;Michael&apos;, &apos;Sarah&apos;, &apos;Tracy&apos;]</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><pre><code>r = []
+n = 3 
+for i in range(n):
+    r.append(L[i])
+r
+
+[&apos;Michael&apos;, &apos;Sarah&apos;, &apos;Tracy&apos;]</code></pre><h3 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h3><p>L[0:3]表示，从索引0开始取，直到索引3为止，但不包括索引3。即索引0，1，2，正好是3个元素。</p>
+<p>如果第一个索引是0，还可以省略：</p>
+<pre><code>&gt;&gt;&gt; L[0:3]
+[&apos;Michael&apos;, &apos;Sarah&apos;, &apos;Tracy&apos;]
+&gt;&gt;&gt; L[1:3]
+[&apos;Sarah&apos;, &apos;Tracy&apos;]</code></pre><p>类似的，既然Python支持L[-1]取倒数第一个元素，那么它同样支持倒数切片，试试：</p>
+<pre><code>&gt;&gt;&gt; L[-2:]
+[&apos;Bob&apos;, &apos;Jack&apos;]
+&gt;&gt;&gt; L[-2:-1]
+[&apos;Bob&apos;]</code></pre><p>新建一个1到100的列表：</p>
+<pre><code>&gt;&gt;&gt; L = list(range(100))
+&gt;&gt;&gt; L
+[0, 1, 2, 3, ..., 99]</code></pre><p>所有数，每5个取一个：</p>
+<pre><code>&gt;&gt;&gt; L[::5]
+[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95]</code></pre><p>利用切片去除首尾的空格： </p>
+<pre><code>def(s)
+    while s[:1]==&apos; &apos;:
+        s= s[1:]
+    while s[-1:]==&apos; &apos;:
+        s= s[:-1]
+
+    return s</code></pre><p>##迭代</p>
+<p>###方法一<br>对列表进行迭代：</p>
+<pre><code>for (i=0; i&lt;list.length; i++) {
+    n = list[i];
+}</code></pre><p>对字典进行迭代：</p>
+<pre><code>&gt;&gt;&gt; d = {&apos;a&apos;: 1, &apos;b&apos;: 2, &apos;c&apos;: 3}
+&gt;&gt;&gt; for key in d:
+...     print(key)
+...
+a
+c
+b</code></pre><p>判断是否可以迭代：</p>
+<pre><code>&gt;&gt;&gt; from collections import Iterable
+&gt;&gt;&gt; isinstance(&apos;abc&apos;, Iterable) # str是否可迭代
+True
+&gt;&gt;&gt; isinstance([1,2,3], Iterable) # list是否可迭代
+True
+&gt;&gt;&gt; isinstance(123, Iterable) # 整数是否可迭代
+False    </code></pre><p>Python内置的<strong>enumerate</strong>函数可以把一个list变成索引-元素对，这样就可以在for循环中同时迭代索引和元素本身</p>
+<pre><code>&gt;&gt;&gt; for i, value in enumerate([&apos;A&apos;, &apos;B&apos;, &apos;C&apos;]):
+...     print(i, value)
+...
+0 A
+1 B
+
+&gt;&gt;&gt; for x, y in [(1, 1), (2, 4), (3, 9)]:
+...     print(x, y)
+...
+1 1
+2 4
+3 9</code></pre><p>找出最大值和最小值：</p>
+<pre><code>def findMinAndMax(L):
+
+    if L==[]:
+
+    print((None,None))
+
+    else:
+
+    min=L[0]
+
+    max=L[0]
+
+    for i,value in enumerate(L):
+
+        if value&lt;min:
+
+        min=L[i]
+
+        if value&gt;max:
+
+        max=L[i]
+
+    return (min,max)</code></pre><p>##列表生成</p>
+<p>###方法</p>
+<p>生成有序一元组：</p>
+<pre><code>&gt;&gt;&gt; list(range(1, 11))
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+&gt;&gt;&gt; L = []
+&gt;&gt;&gt; for x in range(1, 11):
+...    L.append(x * x)
+...
+&gt;&gt;&gt; L
+[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]</code></pre><p>在for循环中加入函数：</p>
+<pre><code>&gt;&gt;&gt; [x * x for x in range(1, 11)]
+[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]</code></pre><p>在for循环中加入条件：</p>
+<pre><code>&gt;&gt;&gt; [x * x for x in range(1, 11) if x % 2 == 0]
+[4, 16, 36, 64, 100]</code></pre><p>还可以使用两层循环，可以生成全排列：</p>
+<pre><code>&gt;&gt;&gt; [m + n for m in &apos;ABC&apos; for n in &apos;XYZ&apos;]
+[&apos;AX&apos;, &apos;AY&apos;, &apos;AZ&apos;, &apos;BX&apos;, &apos;BY&apos;, &apos;BZ&apos;, &apos;CX&apos;, &apos;CY&apos;, &apos;CZ&apos;]</code></pre><p>列出当前目录下的所有文件和目录名，可以通过一行代码实现</p>
+<pre><code>&gt;&gt;&gt; import os # 导入os模块，模块的概念后面讲到
+&gt;&gt;&gt; [d for d in os.listdir(&apos;.&apos;)] # os.listdir可以列出文件和目录</code></pre><p>for循环其实可以同时使用两个甚至多个变量，比如dict的items()可以同时迭代key和value：</p>
+<pre><code>&gt;&gt;&gt; d = {&apos;x&apos;: &apos;A&apos;, &apos;y&apos;: &apos;B&apos;, &apos;z&apos;: &apos;C&apos; }
+&gt;&gt;&gt; for k, v in d.items():
+...     print(k, &apos;=&apos;, v)
+...
+y = B
+x = A
+z = C</code></pre><p>因此，列表生成式也可以使用两个变量来生成list：</p>
+<pre><code>&gt;&gt;&gt; d = {&apos;x&apos;: &apos;A&apos;, &apos;y&apos;: &apos;B&apos;, &apos;z&apos;: &apos;C&apos; }
+&gt;&gt;&gt; [k + &apos;=&apos; + v for k, v in d.items()]
+[&apos;y=B&apos;, &apos;x=A&apos;, &apos;z=C&apos;]
+
+&gt;&gt;&gt; L = [&apos;Hello&apos;, &apos;World&apos;, &apos;IBM&apos;, &apos;Apple&apos;]
+&gt;&gt;&gt; [s.lower() for s in L]
+[&apos;hello&apos;, &apos;world&apos;, &apos;ibm&apos;, &apos;apple&apos;]</code></pre><p>清楚L1中的非字符，并且将字符串转化为小写。</p>
+<pre><code>L2 = [s.lower() for s in L1 if isinstance(s, str)]    </code></pre><p>##生成器</p>
+<p>如果列表元素可以按照某种算法推算出来，那我们是否可以在循环的过程中不断推算出后续的元素呢？这样就不必创建完整的list，从而节省大量的空间。在Python中，这种一边循环一边计算的机制，称为生成器：generator</p>
+<p>要创建一个generator，有很多种方法。第一种方法很简单，只要把一个列表生成式的[]改成()，就创建了一个generator：</p>
+<pre><code>&gt;&gt;&gt; L = [x * x for x in range(10)]
+&gt;&gt;&gt; L
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+&gt;&gt;&gt; g = (x * x for x in range(10))
+&gt;&gt;&gt; g
+&lt;generator object &lt;genexpr&gt; at 0x1022ef630&gt;</code></pre><p>如果要一个一个打印出来，可以通过next()函数获得generator的下一个返回值：</p>
+<pre><code>&gt;&gt;&gt; next(g)
+0
+&gt;&gt;&gt; next(g)
+1
+&gt;&gt;&gt; next(g)
+4
+&gt;&gt;&gt; next(g)
+9
+&gt;&gt;&gt; next(g)
+16
+&gt;&gt;&gt; next(g)
+25
+&gt;&gt;&gt; next(g)
+36
+&gt;&gt;&gt; next(g)
+49
+&gt;&gt;&gt; next(g)
+64
+&gt;&gt;&gt; next(g)
+81
+&gt;&gt;&gt; next(g)
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+StopIteration</code></pre><p>当然，上面这种不断调用next(g)实在是太变态了，正确的方法是使用for循环，因为generator也是可迭代对象</p>
+<pre><code>&gt;&gt;&gt; g = (x * x for x in range(10))
+&gt;&gt;&gt; for n in g:
+...     print(n)
+... 
+0
+1
+4
+9
+16
+25
+36
+49
+64
+81</code></pre><p>斐波拉契数列用列表生成式写不出来，但是，用函数把它打印出来却很容易：</p>
+<pre><code>def fib(max):
+    n, a, b = 0, 0, 1
+    while n &lt; max:
+        print(b)
+        a, b = b, a + b
+        n = n + 1
+    return &apos;done&apos;</code></pre><p>也就是说，上面的函数和generator仅一步之遥。要把fib函数变成generator，只需要把print(b)改为yield b就可以了：</p>
+<pre><code>def fib(max):
+    n, a, b = 0, 0, 1
+    while n &lt; max:
+        yield b
+        a, b = b, a + b
+        n = n + 1
+    return &apos;done&apos;</code></pre><p>这就是定义generator的另一种方法。如果一个函数定义中包含yield关键字，那么这个函数就不再是一个普通函数，而是一个generator：</p>
+<pre><code>&gt;&gt;&gt; f = fib(6)
+&gt;&gt;&gt; f
+&lt;generator object fib at 0x104feaaa0&gt;</code></pre><p>这里，最难理解的就是generator和函数的执行流程不一样。函数是顺序执行，遇到return语句或者最后一行函数语句就返回。而变成generator的函数，在每次调用next()的时候执行，遇到yield语句返回，再次执行时从上次返回的yield语句处继续执行。</p>
+<pre><code>def odd():
+    print(&apos;step 1&apos;)
+    yield 1
+    print(&apos;step 2&apos;)
+    yield(3)
+    print(&apos;step 3&apos;)
+    yield(5)</code></pre><p>调用该generator时，首先要生成一个generator对象，然后用next()函数不断获得下一个返回值：</p>
+<pre><code>&gt;&gt;&gt; o = odd()
+&gt;&gt;&gt; next(o)
+step 1
+1
+&gt;&gt;&gt; next(o)
+step 2
+3
+&gt;&gt;&gt; next(o)
+step 3
+5
+&gt;&gt;&gt; next(o)
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+StopIteration</code></pre><p>但是用for循环调用generator时，发现拿不到generator的return语句的返回值。如果想要拿到返回值，必须捕获StopIteration错误，返回值包含在StopIteration的value中：</p>
+<pre><code>&gt;&gt;&gt; g = fib(6)
+&gt;&gt;&gt; while True:
+...     try:
+...         x = next(g)
+...         print(&apos;g:&apos;, x)
+...     except StopIteration as e:
+...         print(&apos;Generator return value:&apos;, e.value)
+...         break
+...
+g: 1
+g: 1
+g: 2
+g: 3
+g: 5
+g: 8
+Generator return value: done</code></pre><p>生成杨辉三角：</p>
+<pre><code>def triangles():
+    L = [1]
+    while True:
+        yield L
+        L = [L[i] + L[i + 1] for i in range(len(L) - 1)]
+        L.append(1)
+        L.insert(0, 1)</code></pre><p>##迭代器：</p>
+<p>可以使用isinstance()判断一个对象是否是Iterable对象：</p>
+<pre><code>&gt;&gt;&gt; from collections import Iterable
+&gt;&gt;&gt; isinstance([], Iterable)
+True
+&gt;&gt;&gt; isinstance({}, Iterable)
+True
+&gt;&gt;&gt; isinstance(&apos;abc&apos;, Iterable)
+True
+&gt;&gt;&gt; isinstance((x for x in range(10)), Iterable)
+True
+&gt;&gt;&gt; isinstance(100, Iterable)
+False</code></pre><p>可以被next()函数调用并不断返回下一个值的对象称为迭代器：Iterator。</p>
+<p>可以使用isinstance()判断一个对象是否是Iterator对象：</p>
+<pre><code>&gt;&gt;&gt; from collections import Iterator
+&gt;&gt;&gt; isinstance((x for x in range(10)), Iterator)
+True
+&gt;&gt;&gt; isinstance([], Iterator)
+False
+&gt;&gt;&gt; isinstance({}, Iterator)
+False
+&gt;&gt;&gt; isinstance(&apos;abc&apos;, Iterator)
+False</code></pre><p>生成器都是Iterator对象，但list、dict、str虽然是Iterable，却不是Iterator。</p>
+<p>把list、dict、str等Iterable变成Iterator可以使用iter()函数：</p>
+<pre><code>&gt;&gt;&gt; isinstance(iter([]), Iterator)
+True
+&gt;&gt;&gt; isinstance(iter(&apos;abc&apos;), Iterator)
+True</code></pre><p>这是因为Python的Iterator对象表示的是一个数据流，Iterator对象可以被next()函数调用并不断返回下一个数据，直到没有数据时抛出StopIteration错误。可以把这个数据流看做是一个有序序列，但我们却不能提前知道序列的长度，只能不断通过next()函数实现按需计算下一个数据，所以Iterator的计算是惰性的，只有在需要返回下一个数据时它才会计算。</p>
+<p>Iterator甚至可以表示一个无限大的数据流，例如全体自然数。而使用list是永远不可能存储全体自然数的</p>
+<pre><code># 首先获得Iterator对象:
+it = iter([1, 2, 3, 4, 5])
+# 循环:
+while True:
+    try:
+        # 获得下一个值:
+        x = next(it)
+    except StopIteration:
+        # 遇到StopIteration就退出循环
+    break</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/01/05/python%E5%AD%A6%E4%B9%A0/%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" data-id="ck50n6w7w000bv0vjcmnhe95o" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MDS降维" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/03/MDS%E9%99%8D%E7%BB%B4/" class="article-date">
+  <time datetime="2019-12-03T12:04:53.837Z" itemprop="datePublished">2019-12-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/03/MDS%E9%99%8D%E7%BB%B4/">MDS</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="算法介绍"><a href="#算法介绍" class="headerlink" title="算法介绍"></a><strong>算法介绍</strong></h3><p>非常传统的降维的方法，以距离为标准，将高维坐标中的点投影到低维坐标中，保持彼此之间的相对距离变化最小，更新的方法是T-SNE，基于分布概率变化最小进行投影。</p>
+<p>假定原始高维数据样本的距离矩阵为D，则在低维下的距离矩阵为Z，我们可以用优化算法选取初始点，用梯度下降法求最佳逼近，使得||D-Z||最小，同时，也可以利用內积来求的低维映射。前者在样本较多时容易陷入局部最优，后者较稳定，但在样本不多时，效果比前者要差。</p>
+<p>代码如下：这里用了两种数据集：球形数据集合Iris数据集，算法分别用了基于上述內积求优的算法和sklearn中基于梯度下降求最优的算法，并进行了比较，总体来说，后者稳定，前者更快速。</p>
+<pre><code># coding:utf-8
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.manifold import MDS
+import matplotlib.pyplot as plt
+
+&apos;&apos;&apos;
+author: heucoder
+email: 812860165@qq.com
+date: 2019.6.13
+&apos;&apos;&apos;
+
+def cal_pairwise_dist(x):
+    &apos;&apos;&apos;计算pairwise 距离, x是matrix
+    (a-b)^2 = a^2 + b^2 - 2*a*b
+    &apos;&apos;&apos;
+    sum_x = np.sum(np.square(x), 1)
+    dist = np.add(np.add(-2 * np.dot(x, x.T), sum_x).T, sum_x)
+    #返回任意两个点之间距离的平方
+    return dist
+
+
+def my_mds(data, n_dims):
+    &apos;&apos;&apos;
+    :param data: (n_samples, n_features)
+    :param n_dims: target n_dims
+    :return: (n_samples, n_dims)
+    &apos;&apos;&apos;
+
+    n, d = data.shape
+    dist = cal_pairwise_dist(data)
+    T1 = np.ones((n,n))*np.sum(dist)/n**2
+    T2 = np.sum(dist, axis = 1, keepdims=True)/n
+    T3 = np.sum(dist, axis = 0, keepdims=True)/n
+
+    B = -(T1 - T2 - T3 + dist)/2
+
+    eig_val, eig_vector = np.linalg.eig(B)
+    index_ = np.argsort(-eig_val)[:n_dims]
+    picked_eig_val = eig_val[index_].real
+    picked_eig_vector = eig_vector[:, index_]
+    # print(picked_eig_vector.shape, picked_eig_val.shape)
+    return picked_eig_vector*picked_eig_val**(0.5)
+
+if __name__ == &apos;__main__&apos;:
+    iris = load_iris()
+    data = iris.data
+    Y = iris.target
+    data_1 = my_mds(data, 2)
+
+    data_2 = MDS(n_components=2).fit_transform(data)
+
+    plt.figure(figsize=(8, 4))
+    plt.subplot(121)
+    plt.title(&quot;my_MDS&quot;)
+    plt.scatter(data_1[:, 0], data_1[:, 1], c=Y)
+
+    plt.subplot(122)
+    plt.title(&quot;sklearn_MDS&quot;)
+    plt.scatter(data_2[:, 0], data_2[:, 1], c=Y)
+    plt.savefig(&quot;MDS_1.png&quot;)
+    plt.show()</code></pre><p><img src="https://i.imgur.com/GrDFoIi.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/12/03/MDS%E9%99%8D%E7%BB%B4/" data-id="ck50n6w6q0002v0vjbubo5iha" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-关键词提取算法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/12/01/%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95/" class="article-date">
@@ -139,7 +545,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/01/%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95/" data-id="ck3o9akr10004ucvjamj79jru" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/01/%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95/" data-id="ck50n6w6y0006v0vjbwb4742v" class="article-share-link">Share</a>
       
       
     </footer>
@@ -284,7 +690,7 @@ plt.show()</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/" data-id="ck3o9akqu0001ucvjg8562yag" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/" data-id="ck50n6w690000v0vj5w7u5l1e" class="article-share-link">Share</a>
       
       
     </footer>
@@ -343,7 +749,7 @@ plt.show()</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/01/PCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95/" data-id="ck3o9akqy0002ucvj1joa7xzq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/01/PCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95/" data-id="ck50n6w6t0004v0vj4rmca5ns" class="article-share-link">Share</a>
       
       
     </footer>
@@ -380,7 +786,7 @@ plt.show()</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/07/new-Post/" data-id="ck3o9akqz0003ucvj1jn247fl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/11/07/new-Post/" data-id="ck50n6w6s0003v0vj3lr67zmt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%87%AA%E8%BF%B0/" rel="tag">自述</a></li></ul>
@@ -590,7 +996,7 @@ plt.show()</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/07/My-Gallery/" data-id="ck3o9akrn0007ucvja97sgmkh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/11/07/My-Gallery/" data-id="ck50n6w780008v0vj581zexgr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li></ul>
@@ -641,7 +1047,7 @@ plt.show()</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/04/hello-world/" data-id="ck3o9akqk0000ucvj4dylhdug" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/11/04/hello-world/" data-id="ck50n6w6n0001v0vj2qjkh7th" class="article-share-link">Share</a>
       
       
     </footer>
@@ -683,7 +1089,7 @@ plt.show()</code></pre>
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li></ul>
     </div>
   </div>
 
@@ -696,6 +1102,14 @@ plt.show()</code></pre>
       <ul>
         
           <li>
+            <a href="/2020/01/05/python%E5%AD%A6%E4%B9%A0/%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/">高级特性</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/03/MDS%E9%99%8D%E7%BB%B4/">MDS</a>
+          </li>
+        
+          <li>
             <a href="/2019/12/01/%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95/">关键词提取</a>
           </li>
         
@@ -705,14 +1119,6 @@ plt.show()</code></pre>
         
           <li>
             <a href="/2019/12/01/PCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95/">PCA</a>
-          </li>
-        
-          <li>
-            <a href="/2019/11/07/new-Post/">new Post</a>
-          </li>
-        
-          <li>
-            <a href="/2019/11/07/My-Gallery/">My Gallery</a>
           </li>
         
       </ul>
@@ -727,7 +1133,7 @@ plt.show()</code></pre>
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2020 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

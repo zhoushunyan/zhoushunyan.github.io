@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>高阶函数 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. 慢慢来##">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高阶函数">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;06&#x2F;python%E5%AD%A6%E4%B9%A0&#x2F;hello-world&#x2F;index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. 慢慢来##">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-01-06T06:41:23.412Z">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-python学习/hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/06/python%E5%AD%A6%E4%B9%A0/hello-world/" class="article-date">
+  <time datetime="2020-01-06T05:11:49.099Z" itemprop="datePublished">2020-01-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      高阶函数
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="慢慢来"><a href="#慢慢来" class="headerlink" title="慢慢来"></a>慢慢来</h2><p>###More info: <a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017328655674400" target="_blank" rel="noopener">Writing</a></p>
+<p>###第一步</p>
+<p>变量可以指向函数</p>
+<pre><code>&gt;&gt;&gt; abs(-10)
+10
+&gt;&gt;&gt; abs
+&lt;built-in function abs&gt;
+&gt;&gt;&gt; x = abs(-10)
+&gt;&gt;&gt; x
+10</code></pre><p>但是，如果把函数本身赋值给变量呢？结论：函数本身也可以赋值给变量，即：变量可以指向函数。</p>
+<p>如果一个变量指向了一个函数，那么，可否通过该变量来调用这个函数？用代码验证一下：</p>
+<pre><code>&gt;&gt;&gt; f = abs
+&gt;&gt;&gt; f
+&lt;built-in function abs&gt;
+&gt;&gt;&gt; f(-10)
+10</code></pre><p>成功！说明变量f现在已经指向了abs函数本身。直接调用abs()函数和调用变量f()完全相同。</p>
+<p>那么函数名是什么呢？函数名其实就是指向函数的变量！对于abs()这个函数，完全可以把函数名abs看成变量，它指向一个可以计算绝对值的函数！</p>
+<p>如果把abs指向其他对象，会有什么情况发生？</p>
+<pre><code>&gt;&gt;&gt; abs = 10
+&gt;&gt;&gt; abs(-10)
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+TypeError: &apos;int&apos; object is not callable</code></pre><p>###高阶函数：既然变量可以指向函数，函数的参数能接收变量，那么一个函数就可以接收另一个函数作为参数，这种函数就称之为高阶函数。</p>
+<p>一个最简单的高阶函数：</p>
+<pre><code>def add(x, y, f):
+    return f(x) + f(y)
+推导过程
+
+x = -5
+y = 6
+f = abs
+f(x) + f(y) ==&gt; abs(-5) + abs(6) ==&gt; 11
+return 11</code></pre><p>##map/reduce</p>
+<p>我们先看map。map()函数接收两个参数，一个是函数，一个是Iterable，map将传入的函数依次作用到序列的每个元素，并把结果作为新的Iterator返回。</p>
+<p>举例说明，比如我们有一个函数f(x)=x2，要把这个函数作用在一个list [1, 2, 3, 4, 5, 6, 7, 8, 9]上，就可以用map()实现如下：</p>
+<pre><code>&gt;&gt;&gt; def f(x):
+...     return x * x
+...
+map使用
+&gt;&gt;&gt; r = map(f, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+&gt;&gt;&gt; list(r)
+[1, 4, 9, 16, 25, 36, 49, 64, 81]
+循环使用
+L = []
+for n in [1, 2, 3, 4, 5, 6, 7, 8, 9]:
+    L.append(f(n))
+print(L)</code></pre><p>###所以，map()作为高阶函数，事实上它把运算规则抽象了，因此，我们不但可以计算简单的f(x)=x2，还可以计算任意复杂的函数，比如，把这个list所有数字转为字符串</p>
+<pre><code>&gt;&gt;&gt; list(map(str, [1, 2, 3, 4, 5, 6, 7, 8, 9]))
+[&apos;1&apos;, &apos;2&apos;, &apos;3&apos;, &apos;4&apos;, &apos;5&apos;, &apos;6&apos;, &apos;7&apos;, &apos;8&apos;, &apos;9&apos;]</code></pre><p>###再看reduce的用法。reduce把一个函数作用在一个序列[x1, x2, x3, …]上，这个函数必须接收两个参数，reduce把结果继续和序列的下一个元素做累积计算，其效果就是：</p>
+<pre><code>reduce(f, [x1, x2, x3, x4]) = f(f(f(x1, x2), x3), x4)</code></pre><p>比方说对一个序列求和，就可以用reduce实现：</p>
+<pre><code>&gt;&gt;&gt; from functools import reduce
+&gt;&gt;&gt; def add(x, y):
+...     return x + y
+...
+&gt;&gt;&gt; reduce(add, [1, 3, 5, 7, 9])
+25
+使用sum（）函数
+sum([1, 3, 5, 7, 9])</code></pre><p>但是如果要把序列[1, 3, 5, 7, 9]变换成整数13579，reduce就可以派上用场：</p>
+<pre><code>&gt;&gt;&gt; from functools import reduce
+&gt;&gt;&gt; def fn(x, y):
+...     return x * 10 + y
+...
+&gt;&gt;&gt; reduce(fn, [1, 3, 5, 7, 9])
+13579</code></pre><p>这个例子本身没多大用处，但是，如果考虑到字符串str也是一个序列，对上面的例子稍加改动，配合map()，我们就可以写出把str转换为int的函数</p>
+<pre><code>&gt;&gt;&gt; from functools import reduce
+&gt;&gt;&gt; def fn(x, y):
+...     return x * 10 + y
+...
+&gt;&gt;&gt; def char2num(s):
+...     digits = {&apos;0&apos;: 0, &apos;1&apos;: 1, &apos;2&apos;: 2, &apos;3&apos;: 3, &apos;4&apos;: 4, &apos;5&apos;: 5, &apos;6&apos;: 6, &apos;7&apos;: 7, &apos;8&apos;: 8, &apos;9&apos;: 9}
+...     return digits[s]
+...
+&gt;&gt;&gt; reduce(fn, map(char2num, &apos;13579&apos;))
+13579</code></pre><p>整理成一个str2int的函数就是：</p>
+<pre><code>from functools import reduce
+
+DIGITS = {&apos;0&apos;: 0, &apos;1&apos;: 1, &apos;2&apos;: 2, &apos;3&apos;: 3, &apos;4&apos;: 4, &apos;5&apos;: 5, &apos;6&apos;: 6, &apos;7&apos;: 7, &apos;8&apos;: 8, &apos;9&apos;: 9}
+
+def str2int(s):
+    def fn(x, y):
+        return x * 10 + y
+    def char2num(s):
+        return DIGITS[s]
+    return reduce(fn, map(char2num, s))</code></pre><p>还可以用lambda函数进一步简化成：</p>
+<pre><code>from functools import reduce
+
+DIGITS = {&apos;0&apos;: 0, &apos;1&apos;: 1, &apos;2&apos;: 2, &apos;3&apos;: 3, &apos;4&apos;: 4, &apos;5&apos;: 5, &apos;6&apos;: 6, &apos;7&apos;: 7, &apos;8&apos;: 8, &apos;9&apos;: 9}
+
+def char2num(s):
+    return DIGITS[s]
+
+def str2int(s):
+    return reduce(lambda x, y: x * 10 + y, map(char2num, s))</code></pre><p>利用map()函数，把用户输入的不规范的英文名字，变为首字母大写，其他小写的规范名字。输入：[‘adam’, ‘LISA’, ‘barT’]，输出：[‘Adam’, ‘Lisa’, ‘Bart’]：</p>
+<pre><code>def normal(name):
+    return name.capitalize()
+
+l=list(map(normal,[&apos;adam&apos;, &apos;LISA&apos;, &apos;barT&apos;]))
+print(l)
+[&apos;Adam&apos;, &apos;Lisa&apos;, &apos;Bart&apos;]</code></pre><p>Python提供的sum()函数可以接受一个list并求和，请编写一个prod()函数，可以接受一个list并利用reduce()求积：</p>
+<pre><code>from functools import reduce
+def ji(x,y):
+    return x*y
+
+print(reduce(ji,[3,5,7,9]))</code></pre><p>利用map和reduce编写一个str2float函数，把字符串’123.456’转换成浮点数123.456：</p>
+<pre><code>def str2float(s):
+    DIGITS = {&apos;0&apos;: 0, &apos;1&apos;: 1, &apos;2&apos;: 2, &apos;3&apos;: 3, &apos;4&apos;: 4, &apos;5&apos;: 5, &apos;6&apos;: 6, &apos;7&apos;: 7, &apos;8&apos;: 8, &apos;9&apos;: 9}
+    # 将传入的字符串转为list
+    _list = list(s)
+    # 求原list长度
+    len_of_list = len(_list)
+    # 求.的位置
+    position_of_point = _list.index(&apos;.&apos;)
+    # 删除.
+    _list.pop(position_of_point)
+    # 将str list转为int list
+    _2_int_list = map(lambda x: DIGITS[x], _list)
+    # 用reduce 将_2_int_list组合为int
+    num = reduce(lambda x, y: 10 * x + y, _2_int_list)
+    # 在适当位置添加小数点
+    return num / 10**(len_of_list - (position_of_point + 1))
+print(str2float(&apos;123.4242&apos;))</code></pre><p>##filter</p>
+<p>Python内建的filter()函数用于过滤序列。</p>
+<p>filter()也接收一个函数和一个序列。和map()不同的是，filter()把传入的函数依次作用于每个元素，然后根据返回值是True还是False决定保留还是丢弃该元素。</p>
+<p>例如，在一个list中，删掉偶数，只保留奇数，可以这么写：</p>
+<pre><code>def is_odd(n):
+    return n % 2 == 1
+
+list(filter(is_odd, [1, 2, 4, 5, 6, 9, 10, 15]))
+# 结果: [1, 5, 9, 15]</code></pre><p>把一个序列中的空字符串删掉，可以这么写：</p>
+<pre><code>def not_empty(s):
+    return s and s.strip()
+
+list(filter(not_empty, [&apos;A&apos;, &apos;&apos;, &apos;B&apos;, None, &apos;C&apos;, &apos;  &apos;]))
+# 结果: [&apos;A&apos;, &apos;B&apos;, &apos;C&apos;]</code></pre><p>用filter求素数<br>计算素数的一个方法是埃氏筛法，它的算法理解起来非常简单：</p>
+<p>首先，列出从2开始的所有自然数，构造一个序列：</p>
+<p>2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, …</p>
+<p>取序列的第一个数2，它一定是素数，然后用2把序列的2的倍数筛掉：</p>
+<p>3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, …</p>
+<p>取新序列的第一个数3，它一定是素数，然后用3把序列的3的倍数筛掉：</p>
+<p>5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, …</p>
+<p>取新序列的第一个数5，然后用5把序列的5的倍数筛掉：</p>
+<p>7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, …</p>
+<p>不断筛下去，就可以得到所有的素数。</p>
+<p>用Python来实现这个算法，可以先构造一个从3开始的奇数序列</p>
+<pre><code>def _odd_iter():
+    n = 1
+    while True:
+        n = n + 2
+        yield n</code></pre><p>筛选函数：</p>
+<pre><code>def _not_divisible(n):
+    return lambda x: x % n &gt; 0</code></pre><p>最后，定义一个生成器，不断返回下一个素数：</p>
+<pre><code>def primes():
+    yield 2
+    it = _odd_iter() # 初始序列
+    while True:
+        n = next(it) # 返回序列的第一个数
+        yield n
+        it = filter(_not_divisible(n), it) # 构造新序列</code></pre><p>这个生成器先返回第一个素数2，然后，利用filter()不断产生筛选后的新的序列。</p>
+<p>由于primes()也是一个无限序列，所以调用时需要设置一个退出循环的条件：</p>
+<pre><code># 打印1000以内的素数:
+for n in primes():
+    if n &lt; 1000:
+        print(n)
+    else:
+        break</code></pre><p>##sorted 排序</p>
+<p>排序也是在程序中经常用到的算法。无论使用冒泡排序还是快速排序，排序的核心是比较两个元素的大小。如果是数字，我们可以直接比较，但如果是字符串或者两个dict呢？直接比较数学上的大小是没有意义的，因此，比较的过程必须通过函数抽象出来。</p>
+<p>Python内置的sorted()函数就可以对list进行排序</p>
+<pre><code>&gt;&gt;&gt; sorted([36, 5, -12, 9, -21])
+[-21, -12, 5, 9, 36]</code></pre><p>此外，sorted()函数也是一个高阶函数，它还可以接收一个key函数来实现自定义的排序，例如按绝对值大小排序：</p>
+<pre><code>&gt;&gt;&gt; sorted([36, 5, -12, 9, -21], key=abs)
+[5, 9, -12, -21, 36]</code></pre><p>我们再看一个字符串排序的例子，默认情况下，对字符串排序，是按照ASCII的大小比较的，由于’Z’ &lt; ‘a’，结果，大写字母Z会排在小写字母a的前面。现在，我们提出排序应该忽略大小写，按照字母序排序。要实现这个算法，不必对现有代码大加改动，只要我们能用一个key函数把字符串映射为忽略大小写排序即可。忽略大小写来比较两个字符串，实际上就是先把字符串都变成大写（或者都变成小写），再比较</p>
+<pre><code>sorted([&apos;bob&apos;, &apos;about&apos;, &apos;Zoo&apos;, &apos;Credit&apos;], key=str.lower)
+[&apos;about&apos;, &apos;bob&apos;, &apos;Credit&apos;, &apos;Zoo&apos;]</code></pre><p>要进行反向排序，不必改动key函数，可以传入第三个参数reverse=True：</p>
+<pre><code>&gt;&gt;&gt; sorted([&apos;bob&apos;, &apos;about&apos;, &apos;Zoo&apos;, &apos;Credit&apos;], key=str.lower, reverse=True)
+[&apos;Zoo&apos;, &apos;Credit&apos;, &apos;bob&apos;, &apos;about&apos;]
+
+
+
+
+L = [(&apos;Bob&apos;, 75), (&apos;Adam&apos;, 92), (&apos;Bart&apos;, 66), (&apos;Lisa&apos;, 88)]
+def by_name(t):
+    return t[0]
+def by_score(t):
+    return t[1]
+print(sorted(L,key=by_name))
+print(sorted(L,key=by_score,reverse=True))</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/01/06/python%E5%AD%A6%E4%B9%A0/hello-world/" data-id="ck522ulm10000w4vjged5dobh" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/01/05/python%E5%AD%A6%E4%B9%A0/%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">高级特性</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E8%BF%B0/" rel="tag">自述</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/%E8%87%AA%E8%BF%B0/" style="font-size: 10px;">自述</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/06/python%E5%AD%A6%E4%B9%A0/hello-world/">高阶函数</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/05/python%E5%AD%A6%E4%B9%A0/%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/">高级特性</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/03/MDS%E9%99%8D%E7%BB%B4/">MDS</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/01/%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95/">关键词提取</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/01/KPCA%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4%E7%AE%97%E6%B3%95%20/">KPCA</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
